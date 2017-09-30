@@ -1,46 +1,45 @@
 FROM debian:testing-slim
+LABEL maintainer="n@noeljackson.com"
+RUN echo "Node.js that serves your app from /usr/src/app, hopefully useful in production and development, use the \`packages=your list of packages\` argument to specify packages. Default is \`packages='build-essential dh-autoreconf curl xz-utils python libpng-dev git'\`"
 
-ENV EPHIMERAL_PACKAGES "build-essential dh-autoreconf curl xz-utils python"
-ENV PACKAGES "libpng-dev git"
-
-# install apt packages (and clean up afterwards)
+# Install packages
+ARG PACKAGES="build-essential dh-autoreconf curl xz-utils python libpng-dev git"
 RUN apt-get update \
   && apt-get install -y apt-utils \
-  && apt-get install -y ${EPHIMERAL_PACKAGES} ${PACKAGES} \
+  && apt-get install -y ${PACKAGES} \
   && curl -sL https://deb.nodesource.com/setup_8.x | bash - \
-  && apt-get install -y nodejs
-
-# Install app dependencies
-WORKDIR /tmp
-COPY package.json /tmp/
-RUN npm config set registry http://registry.npmjs.org/
-# Yarn for diversity of development, won't affect production
-RUN npm i -g yarn
-
-# Install the app
-# Override with NODE_ENV=production as needed.
-RUN npm install
-
-# Clean up apt packages not needed for production
-RUN apt-get remove --purge -y ${EPHIMERAL_PACKAGES} \
-  ; apt-get autoremove -y ${EPHIMERAL_PACKAGES} \
-  ; apt-get clean \
+  && apt-get install -y nodejs \
+# Clean up apt things you don't really need for production
+  && apt-get clean \
   ; apt-get autoclean \
   ; echo -n > /var/lib/apt/extended_states \
   ; rm -rf /var/lib/apt/lists/* \
   ; rm -rf /usr/share/man/?? \
   ; rm -rf /usr/share/man/??_*
 
+# Set registry
+RUN npm config set registry http://registry.npmjs.org/
+
+# Install yarn
+RUN npm i -g yarn
+
+# Install app dependencies (package.json)
+ONBUILD WORKDIR /tmp
+ONBUILD COPY package.json /tmp/
+
+# Install the app
+ONBUILD RUN npm install
+
 # Create app directory
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+ONBUILD RUN mkdir -p /usr/src/app
+ONBUILD WORKDIR /usr/src/app
 
 # Bundle app source
-COPY . /usr/src/app
-RUN cp -a /tmp/node_modules /usr/src/app/
+ONBUILD COPY . /usr/src/app
+ONBUILD RUN cp -a /tmp/node_modules /usr/src/app/
 
 # Build distribution
-RUN npm run clean && npm run build
+ONBUILD RUN npm run clean && npm run build
 
 # Start the server by default
 CMD npm run server
