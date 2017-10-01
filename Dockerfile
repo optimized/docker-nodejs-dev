@@ -31,8 +31,8 @@ ONBUILD COPY package.json /tmp/
 ONBUILD RUN npm install
 
 # Create app directory
-ONBUILD RUN mkdir -p /usr/src/app
-ONBUILD WORKDIR /usr/src/app
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
 
 # Bundle app source
 ONBUILD COPY . /usr/src/app
