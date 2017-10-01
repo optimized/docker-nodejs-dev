@@ -9,7 +9,6 @@ RUN apt-get update \
   && apt-get install -y ${PACKAGES} \
   && curl -sL https://deb.nodesource.com/setup_8.x | bash - \
   && apt-get install -y nodejs \
-# Clean up apt things you don't really need for production
   && apt-get clean \
   ; apt-get autoclean \
   ; echo -n > /var/lib/apt/extended_states \
@@ -32,7 +31,7 @@ ONBUILD RUN npm install
 
 # Create app directory
 RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+ONBUILD WORKDIR /usr/src/app
 
 # Bundle app source
 ONBUILD COPY . /usr/src/app
