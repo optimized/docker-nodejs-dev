@@ -1,44 +1,52 @@
-FROM debian:testing-slim
+FROM node:9.10.1-alpine
 LABEL maintainer="n@noeljackson.com"
-RUN echo "Node.js that serves your app from /usr/src/app, hopefully useful in production and development, use the \`packages=your list of packages\` argument to specify packages. Default is \`packages='build-essential dh-autoreconf curl xz-utils python libpng-dev git'\`"
 
-# Install packages
-ARG PACKAGES="build-essential dh-autoreconf curl xz-utils python libpng-dev git"
-RUN apt-get update \
-  && apt-get install -y apt-utils \
-  && apt-get install -y ${PACKAGES} \
-  && curl -sL https://deb.nodesource.com/setup_8.x | bash - \
-  && apt-get install -y nodejs \
-  && apt-get clean \
-  ; apt-get autoclean \
-  ; echo -n > /var/lib/apt/extended_states \
-  ; rm -rf /var/lib/apt/lists/* \
-  ; rm -rf /usr/share/man/?? \
-  ; rm -rf /usr/share/man/??_*
+# The official image has verbose logging; change it to npm's default
+ENV NPM_CONFIG_LOGLEVEL notice
+
+# Add packages
+ENV PACKAGES="libpng-dev python make g++"
+RUN apk add --no-cache $PACKAGES
+
+# Add temporary packages, and build the NPM packages/binaries
+ENV EPHEMERAL_PACKAGES="autoconf automake g++ libtool make nasm python python-dev git"
+RUN apk add --no-cache --virtual .tmp $EPHEMERAL_PACKAGES \
+  && apk del .tmp
+
 
 # Set registry
 RUN npm config set registry http://registry.npmjs.org/
 
-# Install yarn
-RUN npm i -g yarn
-
-# Install app dependencies (package.json)
-ONBUILD WORKDIR /tmp
-ONBUILD COPY package.json /tmp/
-
-# Install the app
-ONBUILD RUN npm install
-
 # Create app directory
-RUN mkdir -p /usr/src/app
+ONBUILD RUN mkdir -p /usr/src/app
 ONBUILD WORKDIR /usr/src/app
+# Install app dependencies (package.json)
+
+ONBUILD ADD package*.json /usr/src/app/
+# Install the app
+ONBUILD RUN npm i
+# Add PM2, for Node process management
+RUN npm i -g pm2
+
 
 # Bundle app source
-ONBUILD COPY . /usr/src/app
-ONBUILD RUN cp -a /tmp/node_modules /usr/src/app/
+ONBUILD ADD . /usr/src/app/
+#ONBUILD RUN cp -a /tmp/node_modules /usr/src/app/
+
+ONBUILD ARG NODE_ENV
+ONBUILD ENV NODE_ENV $NODE_ENV
+ONBUILD ARG API_HOST
+ONBUILD ENV API_HOST $API_HOST
+ONBUILD ARG CLIENT_HOST
+ONBUILD ENV CLIENT_HOST $CLIENT_HOST
+ONBUILD ARG HOST
+ONBUILD ENV HOST $HOST
+ONBUILD ARG PORT
+ONBUILD ENV PORT $PORT
 
 # Build distribution
-ONBUILD RUN npm run clean && npm run build
+ONBUILD RUN npm run clean
+ONBUILD RUN npm run build
 
 # Start the server by default
-CMD npm run server
+CMD pm2-docker start dist/server.js -i max
