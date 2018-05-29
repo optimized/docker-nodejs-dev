@@ -1,4 +1,4 @@
-FROM node:9.10.1-alpine
+FROM node:10.2.1-alpine
 LABEL maintainer="n@noeljackson.com"
 
 # The official image has verbose logging; change it to npm's default
@@ -13,7 +13,6 @@ ENV EPHEMERAL_PACKAGES="autoconf automake g++ libtool make nasm python python-de
 RUN apk add --no-cache --virtual .tmp $EPHEMERAL_PACKAGES \
   && apk del .tmp
 
-
 # Set registry
 RUN npm config set registry http://registry.npmjs.org/
 
@@ -27,7 +26,6 @@ ONBUILD ADD package*.json /usr/src/app/
 ONBUILD RUN npm i
 # Add PM2, for Node process management
 RUN npm i -g pm2
-
 
 # Bundle app source
 ONBUILD ADD . /usr/src/app/
