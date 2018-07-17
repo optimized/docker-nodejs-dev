@@ -47,4 +47,4 @@ ONBUILD RUN npm run clean
 ONBUILD RUN npm run build
 
 # Start the server by default
-CMD pm2-docker start dist/server.js -i max
+CMD pm2-runtime start dist/server.js -i max
