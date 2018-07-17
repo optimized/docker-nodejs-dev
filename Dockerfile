@@ -1,4 +1,4 @@
-FROM node:10.2.1-alpine
+FROM node:10.6.0-alpine
 LABEL maintainer="n@noeljackson.com"
 
 # The official image has verbose logging; change it to npm's default
