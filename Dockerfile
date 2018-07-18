@@ -29,22 +29,6 @@ RUN npm i -g pm2
 
 # Bundle app source
 ONBUILD ADD . /usr/src/app/
-#ONBUILD RUN cp -a /tmp/node_modules /usr/src/app/
-
-ONBUILD ARG NODE_ENV
-ONBUILD ENV NODE_ENV $NODE_ENV
-ONBUILD ARG API_HOST
-ONBUILD ENV API_HOST $API_HOST
-ONBUILD ARG CLIENT_HOST
-ONBUILD ENV CLIENT_HOST $CLIENT_HOST
-ONBUILD ARG HOST
-ONBUILD ENV HOST $HOST
-ONBUILD ARG PORT
-ONBUILD ENV PORT $PORT
-
-# Build distribution
-ONBUILD RUN npm run clean
-ONBUILD RUN npm run build
 
 # Start the server by default
-CMD pm2-runtime start dist/server.js -i max
+#CMD pm2-runtime start dist/server.js -i max
