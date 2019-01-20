@@ -13,6 +13,8 @@ RUN apt install -y ${PACKAGES}
 RUN npm config set registry http://registry.npmjs.org/
 RUN npm i -g pm2 yarn
 
+RUN bash -c "echo 'To start run: yarn start' > /etc/motd"
+
 # Create app directory
 ONBUILD RUN mkdir -p /usr/src/app
 ONBUILD WORKDIR /usr/src/app
