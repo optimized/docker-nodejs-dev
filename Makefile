@@ -4,4 +4,4 @@ build:
 
 .PHONY: test
 test: build
-	@docker run --rm -it optimized/docker-nodejs-dev bash -c "yarn install && echo Test passed; exit;"
+	@docker run --rm -it optimized/docker-nodejs-dev bash -c "node -v; yarn -v; yarn install && echo Test passed; exit;"

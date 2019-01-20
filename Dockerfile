@@ -1,6 +1,6 @@
 FROM node:latest
 LABEL maintainer="n@noeljackson.com"
-LABEL version=0.0.3
+LABEL version=v11.7.0
 
 # The official image has verbose logging; change it to npm's default
 #ENV NPM_CONFIG_LOGLEVEL notice
