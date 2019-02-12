@@ -1,6 +1,6 @@
 FROM node:latest
 LABEL maintainer="n@noeljackson.com"
-LABEL version=v11.8.0
+LABEL version=v11.9.0
 
 # The official image has verbose logging; change it to npm's default
 #ENV NPM_CONFIG_LOGLEVEL notice
@@ -14,6 +14,8 @@ RUN npm config set registry http://registry.npmjs.org/
 RUN npm i -g pm2 yarn
 
 RUN bash -c "echo 'To start run: yarn start' > /etc/motd"
+
+ONBUILD USER node
 
 # Create app directory
 ONBUILD RUN mkdir -p /usr/src/app
