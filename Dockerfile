@@ -20,6 +20,7 @@ RUN bash -c "echo 'To start run: yarn start' > /etc/motd"
 # Create app directory
 RUN mkdir -p /usr/src/app && chown -R $(id -u node):$(id -g node) /usr/src/app
 WORKDIR /usr/src/app
+VOLUME ["/usr/src/app"]
 USER node
 
 # Bundle app source
