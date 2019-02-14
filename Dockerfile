@@ -2,6 +2,10 @@ FROM node:latest
 LABEL maintainer="n@noeljackson.com"
 LABEL version=v11.9.0
 USER root
+ADD login-message.txt /etc/login-message.txt
+RUN cat /etc/login-message.txt
+RUN echo '[ ! -z "$TERM" -a -r /etc/motd ] && cat /etc/issue && cat /etc/motd' >> /etc/bash.bashrc; \
+cat /etc/login-message.txt > /etc/motd
 
 # set logging to lower level
 #ENV NPM_CONFIG_LOGLEVEL notice
@@ -13,7 +17,6 @@ RUN apt install -y ${PACKAGES}
 # Set registry
 RUN npm config set registry http://registry.npmjs.org/
 RUN npm i -g pm2 yarn
-RUN bash -c "echo 'To start run: yarn start' > /usr/share/base-files/motd"
 
 # Create app directory
 RUN mkdir -p /usr/src/app/node_modules && chown -R node:node /usr/src/app/
