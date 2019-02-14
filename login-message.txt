@@ -1,1 +1,3 @@
-echo "hello"
+Welcome to Ariadne
+Install: yarn Install
+Start: yarn start

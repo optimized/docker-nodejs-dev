@@ -4,8 +4,8 @@ LABEL version=v11.9.0
 USER root
 ADD login-message.txt /etc/login-message.txt
 RUN cat /etc/login-message.txt
-RUN echo '[ ! -z "$TERM" -a -r /etc/motd ] && cat /etc/motd' >> /etc/bash.bashrc; \
-cat /etc/login-message.txt > /etc/motd
+# RUN echo '[ ! -z "$TERM" -a -r /etc/motd ] && cat /etc/motd' >> /etc/bash.bashrc; \
+RUN cat /etc/login-message.txt > /etc/issue
 
 # set logging to lower level
 #ENV NPM_CONFIG_LOGLEVEL notice
