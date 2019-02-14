@@ -1,7 +1,7 @@
 FROM node:latest
 LABEL maintainer="n@noeljackson.com"
 LABEL version=v11.9.0
-
+USER root
 # The official image has verbose logging; change it to npm's default
 #ENV NPM_CONFIG_LOGLEVEL notice
 
@@ -15,11 +15,12 @@ RUN npm i -g pm2 yarn
 
 RUN bash -c "echo 'To start run: yarn start' > /etc/motd"
 
-ONBUILD USER node
+
 
 # Create app directory
-ONBUILD RUN mkdir -p /usr/src/app
-ONBUILD WORKDIR /usr/src/app
+RUN mkdir -p /usr/src/app && chown -R $(id -u node):$(id -g node) /usr/src/app
+WORKDIR /usr/src/app
+USER node
 
 # Bundle app source
 ONBUILD ADD . /usr/src/app/
