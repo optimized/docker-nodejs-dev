@@ -3,8 +3,8 @@ LABEL maintainer="n@noeljackson.com"
 LABEL version=v11.9.0
 USER root
 ONBUILD ADD login-message.txt /etc/login-message.txt
-RUN echo '[ ! -z "$TERM" -a -r /etc/motd ] && cat /etc/motd' >> /etc/bash.bashrc
-ONBUILD RUN cat /etc/login-message.txt > /etc/motd
+RUN echo '[ ! -z "$TERM" -a -r /etc/login-message.txt ] && cat /etc/login-message.txt' >> /etc/bash.bashrc
+
 
 # set logging to lower level
 #ENV NPM_CONFIG_LOGLEVEL notice
