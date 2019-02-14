@@ -13,7 +13,7 @@ RUN apt install -y ${PACKAGES}
 # Set registry
 RUN npm config set registry http://registry.npmjs.org/
 RUN npm i -g pm2 yarn
-RUN bash -c "echo 'To start run: yarn start' > /etc/motd"
+RUN bash -c "echo 'echo 'To start run: yarn start'' > /home/node/.bashrc"
 
 # Create app directory
 RUN mkdir -p /usr/src/app/node_modules && chown -R node:node /usr/src/app/
