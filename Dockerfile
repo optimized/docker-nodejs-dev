@@ -4,7 +4,7 @@ LABEL version=v11.9.0
 USER root
 ADD login-message.txt /etc/login-message.txt
 RUN cat /etc/login-message.txt
-RUN echo '[ ! -z "$TERM" ] && cat /etc/motd' >> /etc/bash.bashrc;
+RUN echo '[ ! -z "$TERM" -a -r /etc/motd ] && cat /etc/motd' >> /etc/bash.bashrc
 RUN cat /etc/login-message.txt > /etc/motd
 
 # set logging to lower level
