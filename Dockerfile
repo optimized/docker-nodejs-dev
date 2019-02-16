@@ -18,8 +18,10 @@ RUN npm config set registry http://registry.npmjs.org/
 RUN npm i -g pm2 yarn
 
 # Create app directory
-RUN mkdir -p /usr/src/app/node_modules && chown -R node:node /usr/src/app/ && chown -R node:node /usr/src/app/node_modules
-RUN mkdir -p /usr/src/app/build && chown -R node:node /usr/src/app/build
+RUN mkdir -p /usr/src/app/node_modules && \
+    mkdir -p /usr/src/app/build && \
+    chown -R node:node /usr/src/app/ /usr/src/app/node_modules /usr/src/app/build
+
 WORKDIR /usr/src/app
 
 # Setup node_modules to be shareable
