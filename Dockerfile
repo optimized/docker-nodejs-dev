@@ -21,14 +21,11 @@ RUN echo '[ ! -z "$TERM" -a -r /etc/login-message.txt ] && cat /etc/login-messag
 # Create app directory
 WORKDIR /usr/src/app
 
-RUN mkdir -p /usr/src/app/build /usr/src/app/node_modules && chown -R node:node /usr/src/app /usr/src/app/*
 # Bundle app source
 ONBUILD ADD . /usr/src/app/
+ONBUILD RUN mkdir -p /usr/src/app/build /usr/src/app/node_modules && chown -R node:node /usr/src/app /usr/src/app/*
 ONBUILD RUN rm -rf /usr/src/app/node_modules
 
-
-# Setup node_modules to be shareable
-USER node
 
 # Start the server by default
 CMD ["yarn", "start"]
