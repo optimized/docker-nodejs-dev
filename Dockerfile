@@ -2,7 +2,6 @@ FROM node:latest
 LABEL maintainer="n@noeljackson.com"
 LABEL version=v11.9.0
 
-USER root
 # set logging to lower level
 #ENV NPM_CONFIG_LOGLEVEL notice
 
@@ -23,8 +22,6 @@ WORKDIR /usr/src/app
 
 # Bundle app source
 ONBUILD ADD . /usr/src/app/
-ONBUILD RUN chown -R node:node /usr/src/app /usr/src/app/*
-
 
 # Start the server by default
 CMD ["yarn", "start"]
