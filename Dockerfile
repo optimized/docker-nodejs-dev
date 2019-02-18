@@ -21,12 +21,13 @@ RUN echo '[ ! -z "$TERM" -a -r /etc/login-message.txt ] && cat /etc/login-messag
 # Create app directory
 WORKDIR /usr/src/app
 
-# Setup node_modules to be shareable
-USER node
-
 # Bundle app source
 ONBUILD ADD . /usr/src/app/
 ONBUILD RUN rm -rf /usr/src/app/node_modules
+ONBUILD RUN chmod -R node:node /usr/src/app
+
+# Setup node_modules to be shareable
+USER node
 
 # Start the server by default
 CMD ["yarn", "start"]
