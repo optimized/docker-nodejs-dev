@@ -1,4 +1,4 @@
-FROM node:latest
+FROM node:lts
 LABEL maintainer="n@noeljackson.com"
 LABEL version=v11.9.0
 

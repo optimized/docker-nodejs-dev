@@ -1,4 +1,4 @@
-VERSION := $(shell docker run --rm -it node:latest bash -c "node -v")
+VERSION := $(shell docker run --rm -it node:lts bash -c "node -v")
 
 .PHONY: push
 push: build test
