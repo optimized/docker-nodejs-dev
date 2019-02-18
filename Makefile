@@ -1,18 +1,19 @@
+VERSION := $(shell docker run --rm -it node:latest bash -c "node -v")
+
 .PHONY: push
 push: build test
-	@docker push optimized/docker-nodejs-dev; \
+	docker push optimized/docker-nodejs-dev; \
 	git add *; \
-	git commit -m "Version: $$buildversion"; \
-	git push
+	git commit -m "Version: $(VERSION)"; \
+	git push \
 
 .PHONY: build
 build:
 	@docker pull node:latest	
 	@sed -i -- "s/version=.*/version=$(shell docker run --rm -it node:latest bash -c "node -v")/g" Dockerfile
 	@docker build -t optimized/docker-nodejs-dev:latest .
-	@export buildversion=$(shell docker run --rm -it optimized/docker-nodejs-dev:latest bash -c "node -v"); \
-	docker tag optimized/docker-nodejs-dev:latest optimized/docker-nodejs-dev:"$$buildversion"; \
+	docker tag optimized/docker-nodejs-dev:latest optimized/docker-nodejs-dev:$(VERSION);
 
 .PHONY: test
 test: build
-	@docker run --rm -it optimized/docker-nodejs-dev bash -c "node -v; yarn -v; yarn install && echo Test passed; exit;"
+	@docker run --rm -it optimized/docker-nodejs-dev:$(VERSION) bash -c "node -v; yarn -v; cd /tmp; yarn install && echo Test passed; exit;"

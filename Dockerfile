@@ -1,11 +1,8 @@
 FROM node:latest
 LABEL maintainer="n@noeljackson.com"
 LABEL version=v11.9.0
+
 USER root
-ONBUILD ADD login-message.txt /etc/login-message.txt
-RUN echo '[ ! -z "$TERM" -a -r /etc/login-message.txt ] && cat /etc/login-message.txt' >> /etc/bash.bashrc
-
-
 # set logging to lower level
 #ENV NPM_CONFIG_LOGLEVEL notice
 
@@ -17,19 +14,19 @@ RUN apt install -y ${PACKAGES}
 RUN npm config set registry http://registry.npmjs.org/
 RUN npm i -g pm2 yarn
 
-# Create app directory
-RUN mkdir -p /usr/src/app/node_modules && \
-    mkdir -p /usr/src/app/build && \
-    chown -R node:node /usr/src/app/ /usr/src/app/node_modules /usr/src/app/build
+# Login messages
+ONBUILD ADD login-message.txt /etc/login-message.txt
+RUN echo '[ ! -z "$TERM" -a -r /etc/login-message.txt ] && cat /etc/login-message.txt' >> /etc/bash.bashrc
 
+# Create app directory
 WORKDIR /usr/src/app
 
 # Setup node_modules to be shareable
-VOLUME ["/usr/src/app/node_modules"]
 USER node
 
 # Bundle app source
 ONBUILD ADD . /usr/src/app/
+ONBUILD RUN rm -rf /usr/src/app/node_modules
 
 # Start the server by default
 CMD ["yarn", "start"]
