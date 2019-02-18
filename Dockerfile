@@ -24,7 +24,7 @@ WORKDIR /usr/src/app
 # Bundle app source
 ONBUILD ADD . /usr/src/app/
 ONBUILD RUN rm -rf /usr/src/app/node_modules
-ONBUILD RUN chmod -R node:node /usr/src/app
+ONBUILD RUN chown -R node:node /usr/src/app
 
 # Setup node_modules to be shareable
 USER node
