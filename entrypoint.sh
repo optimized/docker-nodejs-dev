@@ -11,5 +11,5 @@ echo "export CURRENT_UID=\$(id -u)"
     # useradd --shell /bin/bash -u $USER_ID -o -c "" -m user
 usermod --shell /bin/bash -u $USER_ID -m node
 export HOME=/home/node
-chown -R $(id -u $USER_ID) /usr/src/app/ /usr/src/app/.*
+chown -R $(id -u $USER_ID) /usr/src/app/ /usr/src/app/build /usr/src/app/node_modules /usr/src/app/.*
 exec "$@"
