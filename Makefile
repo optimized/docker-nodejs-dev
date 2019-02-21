@@ -17,3 +17,4 @@ build:
 .PHONY: test
 test: build
 	@docker run --rm -it optimized/docker-nodejs-dev:$(VERSION) bash -c "node -v; yarn -v; cd /tmp; yarn install && echo Test passed; exit;"
+	@docker run --rm -it -e CURRENT_UID=$(shell id -u) optimized/docker-nodejs-dev:$(VERSION) bash -c ls

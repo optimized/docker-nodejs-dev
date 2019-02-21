@@ -12,4 +12,4 @@ useradd --shell /bin/bash -u $USER_ID -o -c "" -m user
 export HOME=/home/user
 
 chown -R $(id -u $USER_ID):$(id -g $USER_ID) /usr/src/app
-exec gosu user "$@"
+exec "$@"
