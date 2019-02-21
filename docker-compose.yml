@@ -1,0 +1,10 @@
+version: "3.6"
+services:
+  node:
+    build:
+      context: .
+    stdin_open: true
+    tty: true
+    command: bash
+    environment:
+      - CURRENT_UID=${CURRENT_UID?err}
