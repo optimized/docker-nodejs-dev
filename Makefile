@@ -17,7 +17,8 @@ build:
 .PHONY: test
 test: build
 	@docker run --rm -it optimized/docker-nodejs-dev:$(VERSION) bash -c "node -v; yarn -v; cd /tmp; yarn install && echo Test passed; exit;"
-	@docker run --rm -it -e CURRENT_UID=$(shell id -u) optimized/docker-nodejs-dev:$(VERSION) bash -c "whoami; exit;"
+	@docker run --rm -it -e CURRENT_UID=$(shell id -u) -e NODE_ENV=dev optimized/docker-nodejs-dev:$(VERSION) bash -c "whoami; exit;"
+	@export CURRENT_UID=$(shell id -u)
 	@docker-compose up --build -d
 	@docker-compose exec node gosu node:node /bin/bash -c "whoami; exit;"
 	@docker-compose stop && docker-compose rm -f

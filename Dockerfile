@@ -18,7 +18,7 @@ RUN set -eux; \
 
 # Set registry
 RUN npm config set registry http://registry.npmjs.org/
-RUN npm i -g pm2 yarn
+RUN npm i -g pm2 yarn lerna
 
 # Login messages
 ONBUILD ADD login-message.txt /etc/login-message.txt

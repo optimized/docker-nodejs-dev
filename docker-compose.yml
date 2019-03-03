@@ -7,4 +7,4 @@ services:
     tty: true
     command: bash
     environment:
-      - CURRENT_UID=${CURRENT_UID?err}
+      - CURRENT_UID=${CURRENT_UID-1000}
